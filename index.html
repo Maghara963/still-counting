@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#101010">
+<title>STILL COUNTING</title>
+<style>
+:root{color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;min-height:100svh;display:grid;place-items:center;background:#101010;color:#f4eee8;font-family:Arial,Helvetica,sans-serif}
+main{width:min(100% - 32px,460px);text-align:center;padding:34px 18px}
+.kicker{font-size:11px;letter-spacing:.28em;color:#aaa;margin-bottom:24px}
+.heart{font-size:74px;line-height:1;color:#d82d37;text-shadow:0 0 28px #8d101a66;margin-bottom:24px}
+h1{font-size:clamp(27px,8vw,44px);letter-spacing:.08em;margin:12px 0 2px;overflow-wrap:anywhere}
+.label{color:#e1434b;font-size:12px;letter-spacing:.35em}
+.date{color:#aaa;font-size:12px;letter-spacing:.22em;margin-top:26px}
+.rule{height:1px;width:90px;background:#a92630;margin:28px auto}
+.footer{font-family:Georgia,serif;font-style:italic;font-size:17px;color:#eee}
+.note{font-size:10px;color:#777;letter-spacing:.12em;margin-top:38px}
+</style>
+</head>
+<body>
+<main>
+  <div class="kicker">STILL COUNTING / 001</div>
+  <div class="heart" aria-label="heart">♥</div>
+  <div class="label">TIME SINCE THE BEGINNING</div>
+  <h1 id="minutes">LOADING</h1>
+  <div class="label">MINUTES</div>
+  <div class="date" id="date">28 MAY 2021</div>
+  <div class="rule"></div>
+  <div class="footer">Some things are still on their way.</div>
+  <div class="note">AND COUNTING...</div>
+</main>
+<script>
+const params = new URLSearchParams(location.search);
+const raw = params.get("since") || "2021-05-28T00:00:00Z";
+const start = Date.parse(raw);
+const dateEl = document.getElementById("date");
+const minutesEl = document.getElementById("minutes");
+if (!Number.isFinite(start) || start > Date.now()) {
+  minutesEl.textContent = "—";
+  dateEl.textContent = "CHECK START DATE";
+} else {
+  dateEl.textContent = new Date(start).toLocaleDateString("en-GB", {
+    day:"2-digit", month:"long", year:"numeric", timeZone:"UTC"
+  }).toUpperCase();
+  function tick() {
+    minutesEl.textContent = Math.floor((Date.now()-start)/60000).toLocaleString("en-US");
+  }
+  tick();
+  setInterval(tick, 1000);
+}
+</script>
+</body>
+</html>
